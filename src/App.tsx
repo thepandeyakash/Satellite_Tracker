@@ -1,4 +1,5 @@
 import { useObserver } from "./context/ObserverContext"
+import ObserverLocationForm from "./components/ObserverLocationForm";
 
 
 
@@ -8,10 +9,10 @@ function App() {
   console.log("Observer Location:", observerLocation);
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-900 text-white text-3xl">
-      Satellite Tracker Setup Complete 🚀
+    <div className="p-6">
+      <ObserverLocationForm />
     </div>
-  )
+  );
 }
 
 export default App

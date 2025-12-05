@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useObserver } from "../context/ObserverContext";
-
+import { useSatellite } from "../context/SatelliteContext";
 
 type FormState = {
     lat: string;
@@ -9,8 +8,7 @@ type FormState = {
 };
 
 export default function ObserverLocationForm() {
-    const { observerLocation, setObserverLocation } = useObserver();
-
+    const { observerLocation, setObserverLocation } = useSatellite();
     const [form, setForm] = useState<FormState>({
         lat: String(observerLocation.lat),
         lng: String(observerLocation.lng),

@@ -1,16 +1,16 @@
-import { useObserver } from "./context/ObserverContext"
-import ObserverLocationForm from "./components/ObserverLocationForm";
+import { useSatellite } from "./context/SatelliteContext";
+import Dashboard from "./pages/Dashboard";
 
 
 
 
 function App() {
-  const {observerLocation} = useObserver();
+  const {observerLocation} = useSatellite();
   console.log("Observer Location:", observerLocation);
 
   return (
     <div className="p-6">
-      <ObserverLocationForm />
+      <Dashboard />
     </div>
   );
 }

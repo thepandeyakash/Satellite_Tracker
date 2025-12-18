@@ -1,4 +1,4 @@
-// server/index.js
+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -48,6 +48,28 @@ app.get("/api/above", async (req, res) => {
   } catch (err) {
     console.error("Proxy error:", err);
     res.status(500).json({ error: "proxy error", detail: String(err?.message || err) });
+  }
+});
+
+app.get("/api/positions", async (req, res) => {
+  try {
+    const { satid, lat, lng, alt = 0, seconds = 60 } = req.query;
+    if (!satid || !lat || !lng) {
+      return res.status(400).json({ error: "satid, lat and lng are required query params" });
+    }
+
+    const upstream = `https://api.n2yo.com/rest/v1/satellite/positions/${encodeURIComponent(
+      satid
+    )}/${encodeURIComponent(lat)}/${encodeURIComponent(lng)}/${encodeURIComponent(alt)}/${encodeURIComponent(seconds)}/&apiKey=${N2YO_KEY}`;
+
+    const upstreamRes = await fetch(upstream);
+    const contentType = upstreamRes.headers.get("content-type") || "application/json";
+    const text = await upstreamRes.text();
+
+    res.status(upstreamRes.status).header("Content-Type", contentType).send(text);
+  } catch (err) {
+    console.error("Proxy positions error:", err);
+    res.status(500).json({ error: "proxy positions error", detail: String(err?.message || err) });
   }
 });
 

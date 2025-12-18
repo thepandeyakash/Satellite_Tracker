@@ -2,6 +2,8 @@
 import ObserverLocationForm from "../components/ObserverLocationForm";
 import SatelliteList from "../components/SatelliteList";
 import { useSatellite } from "../context/SatelliteContext";
+import MapView from "../components/MapView";
+
 
 export default function Dashboard() {
   const { observerLocation, selectedSatellite } = useSatellite();
@@ -33,8 +35,8 @@ export default function Dashboard() {
 
       <div className="col-span-2">
         <SatelliteList />
-        <div className="mt-6 p-4 bg-white rounded-lg shadow-sm">
-          <div className="text-sm text-gray-600">Map/Globe placeholder (Day 4)</div>
+        <div className="mt-6">
+          <MapView />
         </div>
       </div>
     </div>

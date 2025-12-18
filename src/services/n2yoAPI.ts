@@ -13,6 +13,13 @@ export type SatelliteSummary = {
     category?: string | number;
 };
 
+export type SatellitePositionPoint = {
+  satlat: number;
+  satlng: number;
+  satalt: number;
+  timestamp: number; // epoch seconds
+};
+
 const KEY = import.meta.env.VITE_N2YO_KEY as string;
 if (!KEY) {
     console.warn("N2YO API key is not set. Please set VITE_N2YO_KEY in your environment variables.");
@@ -57,4 +64,40 @@ export async function getSatellitesAbove(
         category: s.category ?? undefined,
     }));
     return normalized;
+}
+
+export async function getSatellitePositions(
+  satid: number,
+  observer: { lat: number; lng: number; alt: number },
+  seconds = 60,
+  signal?: AbortSignal
+): Promise<SatellitePositionPoint[]> {
+  const { lat, lng, alt } = observer;
+  // proxy URL (local dev). If you set VITE_PROXY_ORIGIN in .env, the code will use it.
+  const proxyOrigin = import.meta.env.VITE_PROXY_ORIGIN as string | undefined;
+  const base = proxyOrigin ? proxyOrigin.replace(/\/$/, "") : "http://localhost:8000";
+  const url = `${base}/api/positions?satid=${encodeURIComponent(satid)}&lat=${encodeURIComponent(
+    lat
+  )}&lng=${encodeURIComponent(lng)}&alt=${encodeURIComponent(alt)}&seconds=${encodeURIComponent(seconds)}`;
+
+  const res = await fetch(url, { signal });
+  if (!res.ok) {
+    let body: any = null;
+    try {
+      body = await res.json();
+    } catch {}
+    const msg = (body && (body.error || body.message)) || `Proxy error ${res.status}`;
+    throw new Error(msg);
+  }
+
+  const data = await res.json();
+  // N2YO positions returns object with .positions array: { info: {}, positions: [ {satlatitude, satlongitude, sataltitude, timestamp} ] }
+  const raw = Array.isArray(data.positions) ? data.positions : [];
+  const normalized: SatellitePositionPoint[] = raw.map((p: any) => ({
+    satlat: Number(p.satlatitude ?? p.satlat ?? 0),
+    satlng: Number(p.satlongitude ?? p.satlng ?? 0),
+    satalt: Number(p.sataltitude ?? p.satalt ?? 0),
+    timestamp: Number(p.timestamp ?? Math.floor(Date.now() / 1000)),
+  }));
+  return normalized;
 }

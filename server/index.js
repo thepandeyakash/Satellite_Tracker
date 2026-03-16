@@ -14,7 +14,7 @@ if (!N2YO_KEY) {
 // Allow requests from dev frontend (adjust origins as needed in production)
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://satellite-tracker.vercel.app"
+  "https://satellitetrackerr.vercel.app/"
 ];
 
 app.use(cors({

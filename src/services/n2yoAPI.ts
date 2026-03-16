@@ -20,10 +20,10 @@ export type SatellitePositionPoint = {
   timestamp: number; // epoch seconds
 };
 
-const KEY = import.meta.env.VITE_N2YO_KEY as string;
-if (!KEY) {
-    console.warn("N2YO API key is not set. Please set VITE_N2YO_KEY in your environment variables.");
-};
+// const KEY = import.meta.env.VITE_N2YO_KEY as string;
+// if (!KEY) {
+//     console.warn("N2YO API key is not set. Please set VITE_N2YO_KEY in your environment variables.");
+// };
 
 export async function getSatellitesAbove(
     location: ObserverLocation,

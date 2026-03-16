@@ -4,6 +4,9 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
+app.use(cors({
+  origin: "*"
+}));
 const PORT = process.env.PORT || 8000;
 const N2YO_KEY = process.env.N2YO_KEY;
 
@@ -17,10 +20,6 @@ const allowedOrigins = [
   "https://satellitetrackerr.vercel.app"
 ];
 
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
 
 app.use(express.json());
 

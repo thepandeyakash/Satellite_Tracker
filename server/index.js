@@ -12,7 +12,10 @@ if (!N2YO_KEY) {
 }
 
 // Allow requests from dev frontend (adjust origins as needed in production)
-const allowedOrigins = (process.env.CORS_ALLOW || "http://localhost:5173").split(",");
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://satellite-tracker.vercel.app"
+];
 
 app.use(cors({
   origin: function(origin, callback) {
